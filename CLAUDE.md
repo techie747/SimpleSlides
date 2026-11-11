@@ -6,6 +6,7 @@ with Forward / Back / Turn Left / Turn Right navigation over real footage.
 ## Layout
 - `walkthru/app.py` FastAPI app: resumable chunked upload API, tour API, static pages, in-process job worker
 - `walkthru/pipeline.py` stages: checking → frames → mapping → paths → encoding → ready
+- `walkthru/selfie.py` finds and cuts parts where the camera faces the person filming (model in `walkthru/models/`)
 - `walkthru/media.py` ffmpeg/ffprobe helpers · `walkthru/poses.py` ORB visual odometry
 - `walkthru/graph.py` Path Graph (nodes, forward/back, junctions, look-around spins) — pure numpy, unit-tested
 - `walkthru/config.py` every tunable value (override with `WALKTHRU_<NAME>` env vars)

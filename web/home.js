@@ -131,6 +131,7 @@ async function openEditor(tid) {
       <div style="display:flex;gap:8px"><input id="e-brand" placeholder="Your company" value="${esc(brand.name || "")}"><input id="e-color" type="color" value="${brand.color || "#4F8CFF"}" style="width:64px;padding:4px"></div></div>
     <div class="row"><label class="muted">Share link</label><code class="box">${esc(link)}</code></div>
     <div class="row"><label class="muted">Embed on your site</label><code class="box">${esc(embed)}</code></div>
+    ${g.notes?.length ? `<p class="muted">✂ ${g.notes.map(esc).join("<br>✂ ")}</p>` : ""}
     ${g.warnings?.length ? `<p class="muted">⚠ ${g.warnings.map(esc).join("<br>⚠ ")}</p>` : ""}
     <div class="actions" style="justify-content:flex-end"><button id="e-cancel">Cancel</button><button class="primary" id="e-save">Save</button></div></div>`;
   modal.hidden = false;

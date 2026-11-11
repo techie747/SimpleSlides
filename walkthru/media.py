@@ -52,8 +52,8 @@ def normalize(src: Path, dst: Path, max_h: int, gop: int) -> None:
          "-crf", "21", "-g", str(gop), "-keyint_min", str(gop), "-sc_threshold", "0", "-movflags", "+faststart", str(dst)])
 
 
-def sample_frames(src: Path, fps: float, width: int, is_360: bool):
-    """Yield (t, gray_frame) at `fps`. For 360 video use the front-facing quarter (pinhole-like)."""
+def sample_frames(src: Path, fps: float, width: int, is_360: bool, gray: bool = True):
+    """Yield (t, frame) at `fps` (grayscale unless gray=False). For 360 video use the front-facing quarter (pinhole-like)."""
     cap = cv2.VideoCapture(str(src))
     vfps = cap.get(cv2.CAP_PROP_FPS) or 30.0
     step = max(1, round(vfps / fps))
@@ -71,7 +71,7 @@ def sample_frames(src: Path, fps: float, width: int, is_360: bool):
                 frame = frame[h // 4: 3 * h // 4, 3 * w // 8: 5 * w // 8]
             scale = width / frame.shape[1]
             frame = cv2.resize(frame, (width, int(frame.shape[0] * scale)), interpolation=cv2.INTER_AREA)
-            yield i / vfps, cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            yield i / vfps, cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) if gray else frame
         i += 1
     cap.release()
 
@@ -96,3 +96,11 @@ def clip(src: Path, t0: float, t1: float, dst: Path, reverse: bool, gop: int) ->
     run(["ffmpeg", "-y", "-v", "error", "-ss", f"{t0:.3f}", "-to", f"{t1:.3f}", "-i", str(src), "-vf", vf, "-an",
          "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-g", str(gop), "-pix_fmt", "yuv420p",
          "-movflags", "+faststart", str(dst)])
+
+
+def keep_only(src: Path, dst: Path, ranges: list, gop: int) -> None:
+    """Re-encode `src` keeping only the given (start, end) ranges, joined back to back."""
+    expr = "+".join(f"between(t,{a:.3f},{b:.3f})" for a, b in ranges)
+    run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-vf", f"select='{expr}',setpts=N/FRAME_RATE/TB", "-an",
+         "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-g", str(gop), "-keyint_min", str(gop),
+         "-sc_threshold", "0", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(dst)])

@@ -36,6 +36,17 @@ class Config:
     # Playback clips: max height and keyframe interval (frames) so seeks/starts are instant.
     playback_max_height: int = 1080
     playback_gop: int = 12
+    # Selfie removal: cut parts where the camera faces the person filming (flat video only; a 360
+    # camera always sees the person holding it). A frame counts as "selfie" when its largest face is
+    # at least this fraction of the frame height: arm's-length selfies are ~0.25-0.5, people walking
+    # past a few metres away are ~0.05-0.12.
+    selfie_remove: bool = True
+    selfie_face_min_height: float = 0.18
+    selfie_score: float = 0.8              # face detector confidence
+    selfie_sample_fps: float = 3.0         # frames checked per second
+    selfie_min_duration_s: float = 1.0     # shorter face runs are passers-by, not selfies
+    selfie_merge_gap_s: float = 1.5        # bridge brief misses (head turned, motion blur)
+    selfie_pad_s: float = 0.5              # also cut the phone-flipping moment around each selfie
 
 
 def load() -> Config:
@@ -43,7 +54,8 @@ def load() -> Config:
     for f in fields(Config):
         env = os.environ.get(f"WALKTHRU_{f.name.upper()}")
         if env is not None and f.name not in ("data_dir", "allowed_ext"):
-            setattr(cfg, f.name, type(getattr(cfg, f.name))(env))
+            cur = getattr(cfg, f.name)
+            setattr(cfg, f.name, env.strip().lower() in ("1", "true", "yes", "on") if isinstance(cur, bool) else type(cur)(env))
     cfg.data_dir = Path(cfg.data_dir)
     return cfg
 

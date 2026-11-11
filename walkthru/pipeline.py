@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 import cv2
 import numpy as np
 
-from . import db, media
+from . import db, media, selfie
 from .config import CONFIG
 from .graph import build_graph
 from .poses import VisualMatcher, estimate_path
@@ -44,6 +44,25 @@ def process(tid: str, cfg=CONFIG):
         db.update_tour(tid, input_type="360" if info["is_360"] else "flat")
         work = d / "work.mp4"
         media.normalize(src, work, cfg.playback_max_height if not info["is_360"] else 2160, cfg.playback_gop)
+        stage(tid, "checking", 50)
+
+        # Selfie removal: keep only footage that looks where you're walking.
+        notes, removed = [], []
+        if cfg.selfie_remove and not info["is_360"]:
+            removed = selfie.detect(work, info["duration"], cfg)
+            if removed:
+                keep_r = selfie.keep_ranges(removed, info["duration"])
+                if sum(b - a for a, b in keep_r) < 2.0:
+                    raise Friendly("This video only shows the person filming, not the space.",
+                                   "Flip to the back camera and point it where you're walking.")
+                clean = d / "work_clean.mp4"
+                media.keep_only(work, clean, keep_r, cfg.playback_gop)
+                clean.replace(work)
+                info["duration"] = media.probe(work)["duration"]
+                spans = ", ".join(f"{selfie.fmt(a)}–{selfie.fmt(b)}" for a, b in removed)
+                notes.append(f"Removed {len(removed)} selfie part{'s' if len(removed) > 1 else ''} "
+                             f"where the camera faced you ({spans}).")
+            db.append_log(tid, f"selfie: removed {[(round(a, 2), round(b, 2)) for a, b in removed]}")
         stage(tid, "checking", 100)
 
         # 3. Frames
@@ -132,7 +151,8 @@ def process(tid: str, cfg=CONFIG):
         tour_json = {
             "id": tid, "input_type": "360" if info["is_360"] else "flat",
             "width": info["width"], "height": info["height"], "duration": info["duration"],
-            "method": pr.method, "warnings": warnings, "start_node": 0,
+            "method": pr.method, "warnings": warnings, "notes": notes,
+            "removed": [[a, b] for a, b in removed], "start_node": 0,
             **graph.to_dict(),
             "path": [[p.t, p.x, p.z] for p in pr.poses],
         }
