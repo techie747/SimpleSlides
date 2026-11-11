@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WalkThru</title><link rel="stylesheet" href="/static/styles.css"><link rel="stylesheet" href="/static/home.css"></head>
+<body>
+<header class="top"><div class="logo">Walk<b>Thru</b></div><a href="/help" class="muted">How to film</a></header>
+<main class="wrap">
+  <section class="hero">
+    <h1>Drop in a walk-through video.<br><span class="grad">Get a tour anyone can walk.</span></h1>
+    <p class="muted">One upload in, one shareable link out. Works with MP4, MOV, WebM, MKV, AVI, M4V, MPEG and 3GP — phone, gimbal or 360° camera.</p>
+  </section>
+  <section class="grid">
+    <label id="drop" class="card drop" tabindex="0" aria-label="Upload a video">
+      <input id="file" type="file" hidden accept="video/*,.mp4,.mov,.webm,.mkv,.avi,.m4v,.mpeg,.mpg,.3gp">
+      <div class="drop-icon">⬆</div>
+      <h2>Drag your video here</h2>
+      <p class="muted">or <u>choose a file</u> · up to 4 GB / 20 min</p>
+      <div class="formats"><span>.mp4</span><span>.mov</span><span>.webm</span><span>.mkv</span><span>.avi</span><span>.m4v</span><span>.mpeg</span><span>.3gp</span></div>
+    </label>
+    <aside class="card tips">
+      <h3>For the smoothest tour</h3>
+      <ul>
+        <li>🚶 Walk slowly, camera at chest height</li>
+        <li>🔁 Cross back through doorways where you want a branch</li>
+        <li>🔄 Pause and slowly spin in the middle of each room</li>
+        <li>💡 Lights on, no people walking in frame</li>
+        <li>🌐 360° camera? You'll get free look-around</li>
+      </ul>
+    </aside>
+  </section>
+  <section id="tours"></section>
+</main>
+<div id="editor" class="modal" hidden></div>
+<script src="/static/home.js"></script>
+</body></html>

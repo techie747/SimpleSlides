@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WalkThru Tour</title><link rel="stylesheet" href="/static/styles.css"><link rel="stylesheet" href="/static/viewer.css"></head>
+<body>
+<div id="stage" aria-live="polite">
+  <img id="still" alt="" draggable="false"><img id="still2" alt="" draggable="false">
+  <div id="videos"></div><div id="three"></div>
+  <div id="chevrons"></div>
+</div>
+<div id="loading" class="center">Loading tour…</div>
+<div class="pill" id="room" hidden></div>
+<div class="topright">
+  <button id="share" aria-label="Share" title="Share">⤴</button>
+  <button id="fs" aria-label="Fullscreen" title="Fullscreen">⛶</button>
+  <button id="mapbtn" aria-label="Toggle map" title="Map">🗺</button>
+</div>
+<div id="map" class="mapbox"><canvas id="mapc" width="220" height="180" aria-label="Floor path map"></canvas><div id="roomlist"></div></div>
+<nav class="bar" aria-label="Move">
+  <button data-act="left" aria-label="Turn left">←</button>
+  <button data-act="forward" aria-label="Walk forward" class="primary">↑</button>
+  <button data-act="back" aria-label="Walk back">↓</button>
+  <button data-act="right" aria-label="Turn right">→</button>
+  <button id="guided" aria-label="Guided walk" title="Guided walk">▶</button>
+</nav>
+<div id="brand" class="brand"></div>
+<script src="/static/viewer.js"></script>
+</body></html>

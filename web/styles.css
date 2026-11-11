@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Raleway:wght@600;700&display=swap');
+:root{--bg:#0E0F12;--surface:rgba(22,24,29,.8);--surface-solid:#16181D;--line:#262a32;--text:#F5F5F7;--muted:#9AA0A6;
+--accent:#4F8CFF;--ok:#3DDC97;--bad:#FF6B6B;--r:12px;--shadow:0 8px 24px rgba(0,0,0,.25)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,sans-serif}
+h1,h2,h3{font-family:Raleway,Inter,sans-serif;margin:0 0 8px}a{color:var(--accent)}
+button,.btn{font:inherit;min-height:44px;padding:0 18px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface-solid);color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+button.primary,.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+button:hover{filter:brightness(1.12)}button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input,select{font:inherit;min-height:44px;padding:0 12px;border-radius:var(--r);border:1px solid var(--line);background:#0b0c0f;color:var(--text);width:100%}
+.card{background:var(--surface);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:24px}
+.muted{color:var(--muted)}.ok{color:var(--ok)}.bad{color:var(--bad)}
+[hidden]{display:none!important}
