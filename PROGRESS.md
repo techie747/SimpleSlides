@@ -5,6 +5,7 @@
 - **Phase 2 – Path Graph MVP:** frame sampling + blur filter, ORB visual odometry, node spacing, forward + pre-reversed clips, viewer with preloading and no-black-frame transitions.
 - **Phase 3 (partial):** junction detection (position + ORB verification, NMS), spin/look-around detection, 360° sphere viewer (Three.js) with drag-to-look, floor chevrons, minimap with heading cone.
 - **Phase 4 (partial):** editor (title, start point, room labels, brand name/colour), share link, iframe embed, visitor counts, room auto-walk (BFS), guided walk.
+- Local setup verified on macOS (Python 3.12 venv in `.venv/`, Homebrew ffmpeg): 20/20 tests pass, app serves on :8000.
 - Tests: 8 graph unit tests on synthetic camera paths; end-to-end test renders a synthetic corridor video, uploads it in chunks and checks the finished tour.
 
 ## Next
